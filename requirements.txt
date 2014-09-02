@@ -34,3 +34,4 @@ flake8==2.2.3
 autopep8
 easy-thumbnails
 sphinx
+python-social-auth
