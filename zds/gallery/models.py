@@ -3,6 +3,7 @@
 import os
 import string
 import uuid
+import shutil
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -19,7 +20,7 @@ GALLERY_READ = 'R'
 def image_path(instance, filename):
     """Return path to an image."""
     ext = filename.split('.')[-1]
-    filename = u'{}.{}'.format(str(uuid.uuid4()), string.lower(ext))
+    filename = u'{}.{}'.format(str(uuid.uuid4()), ext.lower())
     return os.path.join('galleries', str(instance.gallery.pk), filename)
 
 
@@ -138,3 +139,5 @@ def auto_delete_image_on_delete(sender, instance, **kwargs):
     """Deletes image from filesystem when corresponding object is deleted."""
     for image in instance.get_images():
         image.delete()
+    if (os.path.exists(instance.get_gallery_path())):
+        shutil.rmtree(instance.get_gallery_path())

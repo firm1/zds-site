@@ -19,7 +19,7 @@ class GalleryListViewTest(TestCase):
         response = self.client.get(reverse('zds.gallery.views.gallery_list'), follow=True)
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.quote(reverse('zds.gallery.views.gallery_list'), ''))
+                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.gallery_list'), ''))
 
     def test_list_galeries_belong_to_member(self):
         profile = ProfileFactory()
@@ -51,8 +51,8 @@ class GalleryDetailViewTest(TestCase):
                                            args=['89', 'test-gallery']), follow=True)
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.quote(reverse('zds.gallery.views.gallery_details',
-                                                             args=['89', 'test-gallery']), ''))
+                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.gallery_details',
+                                                                     args=['89', 'test-gallery']), ''))
 
     def test_fail_gallery_no_exist(self):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
@@ -97,13 +97,13 @@ class NewGalleryViewTest(TestCase):
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
                              '?next=' +
-                             urllib.quote(reverse('zds.gallery.views.new_gallery'), ''))
+                             urllib.request.quote(reverse('zds.gallery.views.new_gallery'), ''))
 
         response = self.client.post(reverse('zds.gallery.views.new_gallery'), follow=True)
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
                              '?next=' +
-                             urllib.quote(reverse('zds.gallery.views.new_gallery'), ''))
+                             urllib.request.quote(reverse('zds.gallery.views.new_gallery'), ''))
 
     def test_access_member(self):
         """ just verify with get request that everythings is ok """
@@ -332,13 +332,13 @@ class EditImageViewTest(TestCase):
         )
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.quote(reverse('zds.gallery.views.edit_image', args=[15, 156]), ''))
+                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.edit_image', args=[15, 156]), ''))
 
     def test_fail_member_no_permission_can_edit_image(self):
         login_check = self.client.login(username=self.profile3.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
 
             self.client.post(
                 reverse(
@@ -362,7 +362,7 @@ class EditImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
 
             response = self.client.post(
                 reverse(
@@ -418,7 +418,7 @@ class ModifyImageTest(TestCase):
         response = self.client.get(reverse('zds.gallery.views.delete_image'), follow=True)
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.quote(reverse('zds.gallery.views.delete_image'), ''))
+                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.delete_image'), ''))
 
     def test_fail_modify_image_with_no_permission(self):
         login_check = self.client.login(username=self.profile3.user.username, password='hostel77')
@@ -524,14 +524,14 @@ class NewImageViewTest(TestCase):
         response = self.client.get(reverse('zds.gallery.views.new_image', args=[1]), follow=True)
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.quote(reverse('zds.gallery.views.new_image', args=[1]), ''))
+                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.new_image', args=[1]), ''))
 
     def test_success_new_image_write_permission(self):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -555,7 +555,7 @@ class NewImageViewTest(TestCase):
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -578,7 +578,7 @@ class NewImageViewTest(TestCase):
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -600,7 +600,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -621,7 +621,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'archive-gallery.zip'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.import_image',
@@ -639,7 +639,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile2.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'archive-gallery.zip'), 'r') as fp:
+        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.import_image',
