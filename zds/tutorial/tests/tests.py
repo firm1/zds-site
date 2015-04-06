@@ -2555,7 +2555,8 @@ class BigTutorialTests(TestCase):
         except KeyError:
             found = False
         self.assertTrue(found)  # extract exists in the draft one
-        self.assertEqual(draft_zip.read(extract_in_manifest['text']).decode('utf-8'), extract_content)  # content is good
+        # content is good
+        self.assertEqual(draft_zip.read(extract_in_manifest['text']).decode('utf-8'), extract_content)
 
         draft_zip.close()
         online_zip.close()
@@ -4346,7 +4347,8 @@ class MiniTutorialTests(TestCase):
         except KeyError:
             found = False
         self.assertTrue(found)  # extract exists in the draft one
-        self.assertEqual(draft_zip.read(extract_in_manifest['text']).decode('utf-8'), extract_content)  # content is good
+        # content is good
+        self.assertEqual(draft_zip.read(extract_in_manifest['text']).decode('utf-8'), extract_content)
 
         draft_zip.close()
         online_zip.close()

@@ -332,7 +332,8 @@ class EditImageViewTest(TestCase):
         )
         self.assertRedirects(response,
                              reverse('zds.member.views.login_view') +
-                             '?next=' + urllib.request.quote(reverse('zds.gallery.views.edit_image', args=[15, 156]), ''))
+                             '?next=' + urllib.request.quote(
+                                 reverse('zds.gallery.views.edit_image', args=[15, 156]), ''))
 
     def test_fail_member_no_permission_can_edit_image(self):
         login_check = self.client.login(username=self.profile3.user.username, password='hostel77')

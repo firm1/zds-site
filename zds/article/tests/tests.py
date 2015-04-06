@@ -619,7 +619,8 @@ class ArticleTests(TestCase):
         self.assertNotEqual(online_manifest['title'], article_title)  # title has not changed in online version
 
         self.assertNotEqual(online_zip.read(online_manifest['text']).decode('utf-8'), article_content)
-        self.assertEqual(draft_zip.read(draft_manifest['text']).decode('utf-8'), article_content)  # content is good in draft
+        # content is good in draft
+        self.assertEqual(draft_zip.read(draft_manifest['text']).decode('utf-8'), article_content)
 
         draft_zip.close()
         online_zip.close()
