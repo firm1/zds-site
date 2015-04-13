@@ -339,7 +339,7 @@ class EditImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile3.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
 
             self.client.post(
                 reverse(
@@ -363,7 +363,7 @@ class EditImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
 
             response = self.client.post(
                 reverse(
@@ -532,7 +532,7 @@ class NewImageViewTest(TestCase):
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -556,7 +556,7 @@ class NewImageViewTest(TestCase):
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -579,7 +579,7 @@ class NewImageViewTest(TestCase):
         self.assertTrue(login_check)
         self.assertEqual(0, len(self.gallery.get_images()))
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -601,7 +601,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'logo.png'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'logo.png'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.new_image',
@@ -622,7 +622,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile1.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.import_image',
@@ -640,7 +640,7 @@ class NewImageViewTest(TestCase):
         login_check = self.client.login(username=self.profile2.user.username, password='hostel77')
         self.assertTrue(login_check)
 
-        with open(os.path.join(settings.SITE_ROOT, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
+        with open(os.path.join(settings.BASE_DIR, 'fixtures', 'archive-gallery.zip'), 'rb') as fp:
             response = self.client.post(
                 reverse(
                     'zds.gallery.views.import_image',

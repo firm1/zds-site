@@ -41,7 +41,7 @@ Installation et configuration de `virtualenv`
 .. sourcecode:: bash
 
     pip install virtualenv
-    virtualenv zdsenv --python=python3.4
+    virtualenv zdsenv --python=python3
 
 
 **À chaque fois** que vous souhaitez travailler dans votre environement, activez le via la commande suivante :
