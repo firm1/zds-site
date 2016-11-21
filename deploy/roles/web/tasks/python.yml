@@ -1,0 +1,14 @@
+- name: install virtualenv
+  pip: name=virtualenv
+
+- name: Others requirements
+  pip: name=sqlparse virtualenv="/var/lib/{{zds_app_name}}"
+  become_user: "{{zds_unix_user}}"
+
+- name: Install requirements
+  pip: requirements=/opt/{{zds_app_name}}/requirements.txt virtualenv="/var/lib/{{zds_app_name}}"
+  become_user: "{{zds_unix_user}}"
+
+- name: Install requirements prod
+  pip: requirements=/opt/{{zds_app_name}}/requirements-prod.txt virtualenv="/var/lib/{{zds_app_name}}"
+  become_user: "{{zds_unix_user}}"

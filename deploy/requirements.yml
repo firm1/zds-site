@@ -1,0 +1,16 @@
+# nginx
+- src: geerlingguy.nginx
+  version: 1.9.5
+  name: nginx_role
+
+#mysql
+- src: geerlingguy.mysql
+  name: mysql_role
+
+# tnp
+- src : geerlingguy.ntp
+  name: ntp_role
+
+# nodejs
+- src : tersmitten.nodejs
+  name: nodejs_role

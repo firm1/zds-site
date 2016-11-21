@@ -1,0 +1,79 @@
+update_apt_cache: yes
+
+zds_app_name: zestedesavoir
+
+# Github Information
+
+github_user: zestedesavoir
+github_repo: zds-site
+github_branch: prod
+
+# Unix prerequisites
+
+zds_unix_user: zds
+zds_unix_group: zds
+zds_unix_uid: 1337
+zds_unix_gid: 1337
+repo_private_dir: contents-private
+repo_public_dir: contents-public
+
+nginx_remove_default_vhost: true
+nginx_vhosts:
+  - listen: "80"
+    server_name: "localhost"
+    root: "/home/zds/data"
+    index: "index.php index.html index.htm"
+    error_page: "500 502 504 /500.html"
+    extra_parameters: |
+      location / {
+        # Ajout d'un trailing slash sur les URLs
+        if ($uri !~ (\.|^/api)) {
+          rewrite ^(.*[^/])$ $1/ permanent;
+        }
+
+        include snippets/proxy.conf;
+        proxy_pass http://zdsapp;
+      }
+
+      location @maintenance {
+        rewrite ^(.*)$ /maintenance.html break;
+      }
+
+      # Cache headers on static resources
+      location ~* ^/(static|media|errors)/ {
+        include snippets/static-cache.conf;
+      }
+
+      include snippets/headers.conf;
+      include snippets/antispam.conf;
+
+nginx_client_max_body_size: "100m"
+
+nginx_upstreams:
+  - name: zdsapp
+    servers: {
+      "unix:/run/gunicorn/gunicorn.sock fail_timeout=0"
+    }
+
+ufw_rules: [{ port: 22, rule: allow }, { port: 80, rule: allow }]
+
+# Database infos
+mysql_root_password_update: yes
+mysql_databases:
+  - name: zds_db
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
+mysql_users:
+  - name: zds_user
+    host: "%"
+    password: zds_password
+    priv: "zds_db.*:ALL"
+
+# Ntp
+
+ntp_enabled: true
+ntp_timezone: Europe/Paris
+
+# NodeJs
+
+nodejs_version: nodejs-v5x

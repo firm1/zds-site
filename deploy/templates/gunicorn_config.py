@@ -1,0 +1,9 @@
+command = '/var/lib/{{zds_app_name}}/bin/gunicorn'
+pythonpath = '/opt/{{zds_app_name}}'
+bind = 'unix:/run/gunicorn/gunicorn.sock'
+workers = 3
+user = '{{zds_unix_user}}'
+group = '{{zds_unix_group}}'
+errorlog = '/var/log/{{zds_app_name}}/gunicorn_error.log'
+loglevel = 'info'
+pid = '/var/run/gunicorn-{{zds_app_name}}.pid'

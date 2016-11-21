@@ -1,0 +1,5 @@
+- name: create groups
+  group: name={{zds_unix_group}} gid={{zds_unix_gid}} state=present
+
+- name: create users
+  user: name="{{zds_unix_user}}" uid="{{zds_unix_uid}}" group="{{zds_unix_group}}" shell="/bin/bash"

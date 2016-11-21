@@ -1,0 +1,16 @@
+[Unit]
+Description=SolR ZdS
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+PIDFile=/run/solr/pid
+WorkingDirectory=/var/lib/{{zds_app_name}}/solr/solr-4.9.1/example/
+ExecStart=/usr/bin/java -jar start.jar
+User={{zds_unix_user}}
+Group={{zds_unix_group}}
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

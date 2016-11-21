@@ -1,0 +1,24 @@
+- name: Copy settings prod
+  template: src=settings_prod.py
+            dest="/opt/{{zds_app_name}}/zds/settings_prod.py"
+            owner="{{zds_unix_user}}"
+            group="{{zds_unix_group}}"
+            mode=0755
+            backup=yes
+
+- command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py migrate --fake-initial"
+  become_user: "{{zds_unix_user}}"
+
+- command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py loaddata /opt/{{zds_app_name}}/fixtures/{{item}}.yaml"
+  become_user: "{{zds_unix_user}}"
+  with_items:
+    - users
+    - categories
+    - forums
+    - licences
+    - topics
+    - mps
+    - featured
+
+- command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py load_factory_data /opt/{{zds_app_name}}/fixtures/advanced/aide_tuto_media.yaml"
+  become_user: "{{zds_unix_user}}"

@@ -1,0 +1,26 @@
+- name: Create the Gunicorn socket file
+  template: src=zds.socket
+            dest=/lib/systemd/system/zds.socket
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+- name: Create the Gunicorn service file
+  template: src=zds.service
+            dest=/lib/systemd/system/zds.service
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+- name: Create the Gunicorn config file
+  template: src=gunicorn_config.py
+            dest=/var/lib/{{zds_app_name}}/bin/gunicorn_config.py
+            owner={{ zds_unix_user }}
+            group={{ zds_unix_group }}
+            mode=0755
+            backup=yes
+
+- name: Start service zds site
+  service: state=started name=zds enabled=yes

@@ -1,0 +1,35 @@
+- name: Install base packages
+  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  with_items:
+    - wget
+    - unzip
+    - default-jre
+
+#- unarchive: src=http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.zip dest="/var/lib/{{zds_app_name}}/solr" copy=no
+#  become_user: "{{zds_unix_user}}"
+
+- name: Export schema
+  command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py build_solr_schema"
+  register: schema
+  become_user: "{{zds_unix_user}}"
+
+- name: "Save schema.xml"
+  copy: content="{{ schema.stdout }}" dest="/var/lib/{{zds_app_name}}/solr/solr-4.9.1/example/solr/collection1/conf/schema.xml"
+  become_user: "{{zds_unix_user}}"
+
+- name: Create the Solr service file
+  template: src=solr.service
+            dest=/lib/systemd/system/solr.service
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+- name: Start service solr
+  service: state=started name=solr enabled=yes
+
+- name: Index datas
+  command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py rebuild_index --noinput"
+  register: schema
+  become_user: "{{zds_unix_user}}"
+  ignore_errors: yes

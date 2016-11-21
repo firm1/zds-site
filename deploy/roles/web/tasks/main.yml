@@ -1,0 +1,42 @@
+- name: Install base packages
+  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  with_items:
+    - python-dev
+    - python-pip
+    - python-sqlparse
+    - python-pycurl
+    - libxml2-dev
+    - python-lxml
+    - python-cairo
+    - libffi-dev
+    - python-setuptools
+    - libxslt-dev
+    - libz-dev
+    - libjpeg62-turbo
+    - libjpeg62-turbo-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - libmysqlclient-dev
+    - memcached
+    - optipng
+    - jpegoptim
+  tags: packages
+
+- name: Upgrade pip
+  pip: name=pip state=latest
+  tags: packages
+
+- include: python.yml
+
+- include: django.yml
+
+- include: solr.yml
+
+- command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py collectstatic --noinput"
+  become_user: "{{zds_unix_user}}"
+
+- include: service.yml
+
+- copy: src=templates/webroot/ dest="/var/lib/{{zds_app_name}}/webroot" owner={{zds_unix_user}} group={{zds_unix_group}} mode=0755
+
+- copy: src=templates/snippets/ dest="/etc/nginx/snippets" owner={{zds_unix_user}} group={{zds_unix_group}} mode=0755

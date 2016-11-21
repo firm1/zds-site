@@ -1,0 +1,14 @@
+- name: Install base packages
+  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  with_items:
+    - build-essential
+    - make
+    - g++
+    - graphicsmagick
+  tags: packages
+
+- command: npm install chdir="/opt/{{zds_app_name}}/"
+  become_user: "{{zds_unix_user}}"
+
+- command: npm run build chdir="/opt/{{zds_app_name}}/"
+  become_user: "{{zds_unix_user}}"

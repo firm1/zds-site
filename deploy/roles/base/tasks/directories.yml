@@ -1,0 +1,20 @@
+- name: create data directories
+  file: state=directory owner={{zds_unix_user}} group={{zds_unix_group}} mode=0644 path=/home/{{zds_unix_user}}/{{item}}
+  with_items:
+    - "{{repo_private_dir}}"
+    - "{{repo_public_dir}}"
+
+- name: create app directories
+  file: state=directory owner={{zds_unix_user}} group={{zds_unix_group}} mode=0755 path={{item}}
+  with_items:
+    - "/opt/{{zds_app_name}}"
+    - "/var/lib/{{zds_app_name}}"
+    - "/var/lib/{{zds_app_name}}/webroot"
+    - "/var/lib/{{zds_app_name}}/solr"
+    - "/var/log/{{zds_app_name}}"
+    - "/run/gunicorn"
+    - "/run/solr"
+    - "/home/{{zds_unix_user}}/data"
+    - "/home/{{zds_unix_user}}/data/media"
+    - "/home/{{zds_unix_user}}/data/static"
+
