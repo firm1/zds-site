@@ -1,9 +1,13 @@
 build:                                                  
   ci:
-    - sudo apt-get install -y software-properties-common
-    - sudo apt-add-repository -y ppa:ansible/ansible
-    - sudo apt-get update -y
-    - sudo apt-get install -y ansible
-    - cd deploy
-    - ansible-galaxy install -vvv -r requirements.yml
-    - ansible-playbook -i "localhost," -c local provision.yml
+    # install dependencies
+    - sudo apt-get install -y openssh-server libssl-dev
+    # generate private and public keys
+    - ssh-keygen -t rsa -f ansible_id_rsa
+    # allow future client with this public key to connect to this server
+    - cat ansible_id_rsa.pub >> ~/.ssh/authorized_keys
+    # setup proper permissions
+    - chmod 0700  ~/.ssh/
+    - chmod 0600  ~/.ssh/authorized_keys
+    # make sure the daemon is running
+    - sudo service ssh restart
