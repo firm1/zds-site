@@ -19,18 +19,10 @@ RUN apt-get update \
     && apt-get clean
 RUN pip install ansible cryptography
 
-# setup ssh
-RUN mkdir ~/.ssh
-ADD ansible_id_rsa ~/.ssh/id_rsa
-ADD ansible_id_rsa.pub ~/.ssh/id_rsa.pub
-
 # extend Ansible
-ADD ansible.cfg  /etc/ansible/ansible.cfg
-ADD hosts  /etc/ansible/inventory/hosts
 RUN mkdir /usr/local/deploy
-COPY . /usr/local/deploy/
+COPY deploy /usr/local/deploy/
 WORKDIR /usr/local/deploy
-RUN ls -alh . ; ls -alh env_vars
 # install galaxy
 
 RUN ansible-galaxy install -vvv -r requirements.yml

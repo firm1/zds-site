@@ -5,8 +5,8 @@
     - unzip
     - default-jre
 
-#- unarchive: src=http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.zip dest="/var/lib/{{zds_app_name}}/solr" copy=no
-#  become_user: "{{zds_unix_user}}"
+- unarchive: src=http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.zip dest="/var/lib/{{zds_app_name}}/solr" copy=no
+  become_user: "{{zds_unix_user}}"
 
 - name: Export schema
   command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py build_solr_schema"

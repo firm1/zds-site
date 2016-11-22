@@ -24,6 +24,7 @@ env:
     - TEST_APP="-e back_mysql -- zds.member zds.mp zds.utils zds.forum zds.gallery zds.pages zds.search zds.featured zds.notification"
     - TEST_APP="-e back_mysql -- zds.tutorialv2"
     - TEST_APP="-e front"
+    - TEST_APP="-e docker"
 
 notifications:
   irc:
@@ -33,6 +34,7 @@ notifications:
 
 services:
  - memcached
+ - docker
 
 cache:
   apt: true

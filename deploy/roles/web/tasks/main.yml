@@ -30,7 +30,7 @@
 
 - include: django.yml
 
-- include: solr.yml
+#- include: solr.yml
 
 - command: "/var/lib/{{zds_app_name}}/bin/python /opt/{{zds_app_name}}/manage.py collectstatic --noinput"
   become_user: "{{zds_unix_user}}"

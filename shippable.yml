@@ -11,3 +11,8 @@ build:
     - chmod 0600  ~/.ssh/authorized_keys
     # make sure the daemon is running
     - sudo service ssh restart
+    
+    - cd deploy
+    
+    # build the container from Dockerfile
+    - docker build -t zds-site/ansible .
