@@ -1,0 +1,3 @@
+[docker]
+# host properties where docker daemon is running
+192.168.0.12 ansible_ssh_user=shippable
