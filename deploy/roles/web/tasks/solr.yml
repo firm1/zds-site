@@ -25,6 +25,15 @@
             mode=0644
             backup=yes
 
+- name: Create the Solr sysv file
+  template: src=solr.init
+            dest=/etc/init.d/solr
+            owner=root
+            group=root
+            mode=0755
+            backup=yes
+
+
 - name: Start service solr
   service: state=started name=solr enabled=yes
 

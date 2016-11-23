@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          zds
+# Provides:          solr
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -9,12 +9,12 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir="/opt/{{zds_app_name}}/"
-cmd="/var/lib/{{zds_app_name}}/bin/gunicorn -c /var/lib/{{zds_app_name}}/bin/gunicorn_config.py zds.wsgi"
+dir="/var/lib/{{zds_app_name}}/solr/solr-4.9.1/example/"
+cmd="/usr/bin/java -jar start.jar"
 user="{{zds_unix_user}}"
 
 name=`basename $0`
-pid_file="/run/gunicorn/pid"
+pid_file="/run/solr/pid"
 stdout_log="/var/log/{{zds_app_name}}/$name.log"
 stderr_log="/var/log/{{zds_app_name}}/$name.err"
 

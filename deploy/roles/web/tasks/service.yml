@@ -19,7 +19,7 @@
             dest=/etc/init.d/zds
             owner=root
             group=root
-            mode=0644
+            mode=0755
             backup=yes
 
 - name: Create the Gunicorn config file
