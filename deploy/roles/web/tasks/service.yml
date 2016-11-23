@@ -14,6 +14,14 @@
             mode=0644
             backup=yes
 
+- name: Create the sysv
+  template: src=zds.init
+            dest=/etc/init.d/zds
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
 - name: Create the Gunicorn config file
   template: src=gunicorn_config.py
             dest=/var/lib/{{zds_app_name}}/bin/gunicorn_config.py

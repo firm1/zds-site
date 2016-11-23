@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -19,10 +19,13 @@ RUN apt-get update \
     && apt-get clean
 RUN pip install ansible cryptography
 
+RUN apt-get update && apt-get install -y vim
+
 # extend Ansible
 RUN mkdir /usr/local/deploy
 COPY deploy /usr/local/deploy/
 WORKDIR /usr/local/deploy
+
 # install galaxy
 
 RUN ansible-galaxy install -vvv -r requirements.yml
