@@ -113,3 +113,16 @@ after_success:
       # Run script
       ./scripts/push_front.sh $TRAVIS_TAG
     fi
+  - |
+    if [[ "$TEST_APP" == *"docker"* ]]
+    then
+      if [[ "$TRAVIS_PULL_REQUEST" != false ]] then
+         DOCKER_VERSION = "pr$TRAVIS_PULL_REQUEST"
+      elif [[ ! -z "$TRAVIS_TAG" ]] then
+         DOCKER_VERSION = "$TRAVIS_TAG"
+      else
+         DOCKER_VERSION = "$TRAVIS_BRANCH"
+      fi
+      # Run script
+      ./scripts/docker-push.sh zds-site zds-site $DOCKER_VERSION
+    fi
