@@ -120,7 +120,7 @@ after_success:
          DOCKER_VERSION = "pr$TRAVIS_PULL_REQUEST"
       elif [[ ! -z "$TRAVIS_TAG" ]] then
          DOCKER_VERSION = "$TRAVIS_TAG"
-      else
+      else then
          DOCKER_VERSION = "$TRAVIS_BRANCH"
       fi
       # Run script
