@@ -1,6 +1,5 @@
-- name: clone repository
-  git: repo="https://github.com/{{github_user}}/{{github_repo}}"
-       version={{github_branch}}
-       dest=/opt/{{zds_app_name}}
-       accept_hostkey=yes
-  become_user: "{{zds_unix_user}}"
+- name: refresh source code
+  copy: src="../../../../"
+        dest=/opt/{{zds_app_name}}
+        owner="{{zds_unix_user}}"
+        group="{{zds_unix_group}}"
