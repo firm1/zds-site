@@ -116,11 +116,13 @@ after_success:
   - |
     if [[ "$TEST_APP" == *"docker"* ]]
     then
-      if [[ "$TRAVIS_PULL_REQUEST" != false ]] then
+      if [[ "$TRAVIS_PULL_REQUEST" != false ]]
+      then
          DOCKER_VERSION = "pr$TRAVIS_PULL_REQUEST"
-      elif [[ ! -z "$TRAVIS_TAG" ]] then
+      elif [[ ! -z "$TRAVIS_TAG" ]]
+      then
          DOCKER_VERSION = "$TRAVIS_TAG"
-      else then
+      else
          DOCKER_VERSION = "$TRAVIS_BRANCH"
       fi
       # Run script
