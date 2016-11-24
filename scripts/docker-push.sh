@@ -15,13 +15,21 @@ if [ -z "$DOCKER_VERSION" ]; then
 fi
 
 if [ -z "$DOCKER_USER" ]; then
-    echo "Please provide docker username registry hub"
-    exit 1
+    if [ -z "$4" ]; then
+        echo "Please provide docker username registry hub"
+        exit 1
+    else
+        DOCKER_USER="$4"
+    fi
 fi
 
 if [ -z "$DOCKER_PASSWORD" ]; then
-    echo "Please provide docker password registry hub"
-    exit 1
+    if [ -z "$5" ]; then
+        echo "Please provide docker password registry hub"
+        exit 1
+    else
+        DOCKER_PASSWORD="$5"
+    fi
 fi
 
 echo "Tag docker image"
