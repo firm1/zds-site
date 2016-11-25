@@ -14,7 +14,7 @@ cmd="/var/lib/{{zds_app_name}}/bin/gunicorn -c /var/lib/{{zds_app_name}}/bin/gun
 user="{{zds_unix_user}}"
 
 name=`basename $0`
-pid_file="/run/gunicorn/pid"
+pid_file="/var/run/gunicorn-{{zds_app_name}}.pid"
 stdout_log="/var/log/{{zds_app_name}}/$name.log"
 stderr_log="/var/log/{{zds_app_name}}/$name.err"
 
