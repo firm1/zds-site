@@ -22,9 +22,9 @@ RUN pip install ansible cryptography
 RUN apt-get update && apt-get install -y vim
 
 # extend Ansible
-RUN mkdir /usr/local/deploy
-COPY deploy /usr/local/deploy/
-WORKDIR /usr/local/deploy
+RUN mkdir /usr/local/zds-site
+COPY . /usr/local/zds-site/
+WORKDIR /usr/local/zds-site/deploy
 
 # install galaxy
 

@@ -1,5 +1,16 @@
 - name: refresh source code
-  copy: src="../../../../"
-        dest=/opt/{{zds_app_name}}
-        owner="{{zds_unix_user}}"
-        group="{{zds_unix_group}}"
+  synchronize:
+    src: "../../../../"
+    dest: "/opt/{{zds_app_name}}"
+    rsync_opts:
+      - "--exclude=.*"
+      - "--exclude=*.pyc"
+      - "--exclude=watchdog-build/"
+      - "--exclude=contents-public/"
+      - "--exclude=contents-private/"
+      - "--exclude=dist/"
+      - "--exclude=media/"
+      - "--exclude=node_modules/"
+      - "--exclude=deploy/"
+      - "--exclude=doc/"
+      - "--chown={{zds_unix_user}}:{{zds_unix_group}}"
