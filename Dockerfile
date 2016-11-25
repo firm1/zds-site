@@ -32,4 +32,4 @@ RUN ansible-galaxy install -vvv -r requirements.yml
 RUN ansible-playbook -i "localhost," -c local provision.yml
 EXPOSE 80 8983
 
-ENTRYPOINT ["/usr/local/zds-site/deploy/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/zds-site/deploy/entrypoint.sh"]
