@@ -3,7 +3,6 @@
     src: "../../../../"
     dest: "/opt/{{zds_app_name}}"
     rsync_opts:
-      - "--exclude=.*"
       - "--exclude=*.pyc"
       - "--exclude=watchdog-build/"
       - "--exclude=contents-public/"
