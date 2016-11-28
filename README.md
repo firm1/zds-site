@@ -7,6 +7,7 @@
 
 [![Licence GPL](http://img.shields.io/badge/license-GPL-yellow.svg)](http://www.gnu.org/licenses/quick-guide-gplv3.fr.html)
 [![Documentation Status](https://readthedocs.org/projects/zds-site/badge/?version=latest)](https://readthedocs.org/projects/zds-site/?badge=latest)
+[![Docker Automated build](https://img.shields.io/docker/automated/firm1/zds-site.svg)]()
 
 # Zeste de Savoir
 
