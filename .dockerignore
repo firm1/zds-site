@@ -1,10 +1,8 @@
 *.pyc
-.*
 watchdog-build/
 contents-public/
 contents-private/
 dist/
 media/
 node_modules/
-doc/
 

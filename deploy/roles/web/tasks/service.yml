@@ -30,5 +30,5 @@
             mode=0755
             backup=yes
 
-- name: Start service zds site
-  service: state=started name=zds enabled=yes
+#- name: Start service zds site
+#  service: state=started name=zds enabled=yes
