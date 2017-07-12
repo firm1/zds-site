@@ -22,17 +22,17 @@ env:
   global:
     - secure: "azmDZZQZzf88zpbkYpLpxI66vpEVyv+kniW0QdWAt4qlys8P5OcO3VJBR5YT85vlvnjN9b6raWQAL1ymee0WmVdTmzXed8XjZv7t9QXVw7pfezxMKlEftVp/4Cu4wtvbew0ViZXNWV2hNXHzEqlhgnoIOq94i0UzZ7grMrI0xm0="
   matrix:
-    - TEST_APP="-e back_mysql -- zds.member zds.mp zds.utils zds.forum zds.gallery zds.pages zds.featured zds.notification zds.searchv2"
-    - TEST_APP="-e back_mysql -- zds.tutorialv2"
+#    - TEST_APP="-e back_mysql -- zds.member zds.mp zds.utils zds.forum zds.gallery zds.pages zds.featured zds.notification zds.searchv2"
+#    - TEST_APP="-e back_mysql -- zds.tutorialv2"
     - TEST_APP="-e front"
 
-notifications:
-  webhooks:
-    urls:
-        - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MHNhbmRob3NlJTNBc2FuZGhvc2UuZnIvJTIxd2dlbkt2dHpNY3NYREtiZEhZJTNBbWF0cml4Lm9yZw"
-    on_success: change
-    on_failure: always
-    on_start: never
+#notifications:
+#  webhooks:
+#    urls:
+#        - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MHNhbmRob3NlJTNBc2FuZGhvc2UuZnIvJTIxd2dlbkt2dHpNY3NYREtiZEhZJTNBbWF0cml4Lm9yZw"
+#    on_success: change
+#    on_failure: always
+#    on_start: never
 
 services:
  - memcached
@@ -106,11 +106,12 @@ after_success:
   - coveralls
   - |
     COMMIT_MSG=`git rev-list --format=%B --max-count=1 $TRAVIS_COMMIT`
-    if [[ "$TEST_APP" == *"front"* ]] && [[ "$TRAVIS_PULL_REQUEST" == false ]] && [[ ! -z "$TRAVIS_TAG" ]] && [[ ! "$TRAVIS_TAG" == *"-build" ]]
+#    if [[ "$TEST_APP" == *"front"* ]] && [[ "$TRAVIS_PULL_REQUEST" == false ]] && [[ ! -z "$TRAVIS_TAG" ]] && [[ ! "$TRAVIS_TAG" == *"-build" ]]
+    if [[ "$TEST_APP" == *"front"* ]] && [[ "$TRAVIS_PULL_REQUEST" == false ]] && [[ ! "$TRAVIS_TAG" == *"-build" ]]
     then
       # Adding GitHub OAuth token to login
-      echo "machine github.com login $GITHUB_TOKEN password x-oauth-basic" > $HOME/.netrc
-      git config --global url."https://".insteadOf git://
+      echo -e "machine github.com\n  login 02a05c8d4a1197ae2b8b08f223cbebe7f5e48616" >> ~/.netrc
+      git config --global url."https://github.com/".insteadOf git://github.com/
       git config --global user.name "Build bot"
       git config --global user.email "zestedesavoir@gmail.com"
       git config --global push.default simple
