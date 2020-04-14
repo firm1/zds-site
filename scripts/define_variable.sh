@@ -5,6 +5,7 @@ if [[ $ZDS_VENV == "" ]]; then
 fi
 
 ZDS_NODE_VERSION=$(cat "$ZDSSITE_DIR"/.nvmrc)
+export ZDS_NODE_VERSION
 
 if [[ $ZDS_NVM_VERSION == "" ]]; then
     ZDS_NVM_VERSION="0.33.11"

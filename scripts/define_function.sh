@@ -122,17 +122,17 @@ function gateway() {
 ## start print function
 function print_info() {
     if [[ "$2" == "--bold" ]]; then
-        echo -en "\033[36;1m"
+        echo -en "\\033[36;1m"
     else
-        echo -en "\033[0;36m"
+        echo -en "\\033[0;36m"
     fi
     echo "$1"
-    echo -en "\033[00m"
+    echo -en "\\033[00m"
 }
 
 function print_error() {
-    echo -en "\033[31;1m"
+    echo -en "\\033[31;1m"
     echo "$1"
-    echo -en "\033[00m"
+    echo -en "\\033[00m"
 }
 ## end

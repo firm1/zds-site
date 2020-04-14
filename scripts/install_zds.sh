@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2091,SC2068,SC2086,SC2013,SC2181,SC2164,SC2211,SC2129
 
 # Install script for the zds-site repository
 
@@ -6,6 +7,7 @@
 # load nvm
 function load_nvm {
     export NVM_DIR="$HOME/.nvm"
+    # shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 }
 
@@ -18,7 +20,7 @@ function progressfilt {
         if $flag; then
             printf '%s' "$c"
         else
-            if [[ $c != $cr && $c != $nl ]]; then
+            if [[ "$c" != "$cr" && "$c" != "$nl" ]]; then
                 count=0
             else
                 ((count++))
@@ -44,7 +46,9 @@ ZDSSITE_DIR=$(pwd)
 
 # variables
 LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=scripts/define_variable.sh
 source $LOCAL_DIR/define_variable.sh
+# shellcheck source=scripts/define_function.sh
 source $LOCAL_DIR/define_function.sh
 
 
@@ -54,6 +58,7 @@ if $(_in "--travis-output" $@); then
     ZDS_SHOW_TRAVIS_FOLD=1
     export DJANGO_SETTINGS_MODULE="zds.settings.travis_fixture"
 fi
+export ZDS_SHOW_TRAVIS_FOLD
 
 zds_fold_category "install"
 
@@ -79,11 +84,11 @@ if  ! $(_in "-packages" $@) && ( $(_in "+packages" $@) || $(_in "+base" $@) || $
             exit 1
         fi
     else
-        echo -en "\033[33;1m";
+        echo -en "\\033[33;1m";
         n=1
         arr=()
 
-        for filepath in $LOCAL_DIR/dependencies/*.txt; do
+        for filepath in "$LOCAL_DIR"/dependencies/*.txt; do
             title=$(grep -oP '#title=\K(.*)' "$filepath")
             desc=$(grep -oP '#desc=\K(.*)' "$filepath")
             echo "$n. $title - $desc"
@@ -91,10 +96,10 @@ if  ! $(_in "-packages" $@) && ( $(_in "+packages" $@) || $(_in "+base" $@) || $
             ((n++))
         done
 
-        echo -en "\033[00m"
+        echo -en "\\033[00m"
 
         echo -n "Choice : "
-        read -n 1
+        read -r -n 1
         echo ""
 
         filepath="${arr[$REPLY]}"
@@ -135,7 +140,7 @@ if  ! $(_in "-packages" $@) && ( $(_in "+packages" $@) || $(_in "+base" $@) || $
         elif [[ $exVal != 0 && ! $(_in "--answer-yes" $@) ]]; then
             print_error "Unable to install \`$dep\`, press \`y\` to continue the script."
             echo -n "Choice : "
-            read -n 1
+            read -r -n 1
             echo ""
             if [[ $REPLY == "y" ]]; then
                 print_info "Installation continued"
@@ -169,7 +174,7 @@ if  ! $(_in "-virtualenv" $@) && ( $(_in "+virtualenv" $@) || $(_in "+base" $@) 
             else
                 print_error "We recommend to delete this folder, press \`y\` to delete this folder"
                 echo -n "Choice : "
-                read -n 1
+                read -r -n 1
                 echo ""
                 if [[ $REPLY == "y" ]]; then
                     print_info "remove $(realpath $ZDS_VENV)"
@@ -249,6 +254,7 @@ if ! $(_in "--force-skip-activating" $@) && [[ ( $VIRTUAL_ENV == "" || $(realpat
         exit 1
     fi
 
+    # shellcheck source=/dev/null
     source $ZDS_VENV/bin/activate; exVal=$?
 
     if [[ $exVal != 0 ]]; then
@@ -260,7 +266,7 @@ if ! $(_in "--force-skip-activating" $@) && [[ ( $VIRTUAL_ENV == "" || $(realpat
     fi
 
     zds_fold_end
-else 
+else
     print_info "!! Add \`$(realpath $ZDS_VENV)\` in your PATH."
 
     if [ ! -d $ZDS_VENV ]; then
@@ -270,15 +276,16 @@ else
     zds_fold_end
 fi
 
-export ZDS_ENV=$(realpath $ZDS_VENV)
+ZDS_ENV=$(realpath $ZDS_VENV)
+export ZDS_ENV
 
 
-# local jdk 
+# local jdk
 if  ! $(_in "-jdk-local" $@) && ( $(_in "+jdk-local" $@) || $(_in "+full" $@) ); then
     zds_fold_start "jdk" "* [+jdk-local] installing a local version of JDK (v$ZDS_JDK_VERSION)"
 
-    mkdir -p $ZDS_VENV/lib/
-    cd $ZDS_VENV/lib/
+    mkdir -p "$ZDS_VENV/lib/"
+    cd "$ZDS_VENV/lib/"
 
     jdk_path=$(realpath jdk)
 
@@ -298,18 +305,19 @@ if  ! $(_in "-jdk-local" $@) && ( $(_in "+jdk-local" $@) || $(_in "+full" $@) );
         rm ${foldername}.tar.gz
         mv ${foldername} "$jdk_path"
 
-        echo $($jdk_path/bin/java -version)
+        "$jdk_path"/bin/java -version
 
         export PATH="$PATH:$jdk_path/bin"
         export JAVA_HOME="$jdk_path"
         export ES_JAVA_OPTS="-Xms512m -Xmx512m"
 
         if [[ $(grep -c -i "export JAVA_HOME" $ZDS_ENV/bin/activate) == "0" ]]; then # add java to venv activate's
+            # shellcheck disable=SC1117
             ACTIVATE_JAVA="export PATH=\"$PATH:$jdk_path/bin\"\nexport JAVA_HOME=\"$jdk_path\"\nexport ES_JAVA_OPTS=\"-Xms512m -Xmx512m\""
 
-            echo -e $ACTIVATE_JAVA >> $ZDS_ENV/bin/activate
-            echo -e $ACTIVATE_JAVA >> $ZDS_ENV/bin/activate.csh
-            echo -e $ACTIVATE_JAVA >> $ZDS_ENV/bin/activate.fish
+            echo -e "$ACTIVATE_JAVA" >> $ZDS_ENV/bin/activate
+            echo -e "$ACTIVATE_JAVA" >> $ZDS_ENV/bin/activate.csh
+            echo -e "$ACTIVATE_JAVA" >> $ZDS_ENV/bin/activate.fish
         fi
     else
         print_error "!! Cannot get or extract jdk ${ZDS_JDK_VERSION}"
@@ -336,7 +344,7 @@ if  ! $(_in "-elastic-local" $@) && ( $(_in "+elastic-local" $@) || $(_in "+full
 
     wget_nv https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ZDS_ELASTIC_VERSION}.zip
     if [[ $? == 0 ]]; then
-        unzip -q elasticsearch-${ZDS_ELASTIC_VERSION}.zip 
+        unzip -q elasticsearch-${ZDS_ELASTIC_VERSION}.zip
         rm elasticsearch-${ZDS_ELASTIC_VERSION}.zip
         mv elasticsearch-${ZDS_ELASTIC_VERSION} elasticsearch
 
@@ -396,12 +404,12 @@ if  ! $(_in "-tex-local" $@) && ( $(_in "+tex-local" $@) || $(_in "+full" $@) );
                 ./install-tl*/install-tl -profile texlive.profile
 
                 # Symlink the binaries to bin of venv
-                for i in $BASE_REPO/bin/x86_64-linux/*; do
+                for i in "$BASE_REPO"/bin/x86_64-linux/*; do
                   ln -sf $i $ZDS_ENV/bin/
                 done
             fi
 
-            ./bin/x86_64-linux/tlmgr install $(cat packages)  # extra packages
+            ./bin/x86_64-linux/tlmgr install "$(cat packages)"  # extra packages
             ./bin/x86_64-linux/tlmgr update --self
 
             # Install tabu-fixed packages
@@ -428,7 +436,7 @@ fi
 if  ! $(_in "-latex-template" $@) && ( $(_in "+latex-template" $@) || $(_in "+full" $@) ); then
     zds_fold_start "latex-template" "* [+latex-template] install latex-template (from $ZDS_LATEX_REPO)"
 
-    if [[ $(which kpsewhich) == "" ]]; then # no texlive ?
+    if [[ $(command -v kpsewhich) == "" ]]; then # no texlive ?
         print_error "!! Cannot find kpsewhich, do you have texlive?"
         exit 1;
     fi
@@ -539,10 +547,10 @@ if  ! $(_in "-data" $@) && ( $(_in "+data" $@) || $(_in "+base" $@) || $(_in "+f
     # We check if ZMD is really up:
     nb_zmd_try=0
 
-    while ! curl -s $ZMD_URL > /dev/null && [ $nb_zmd_try -lt 40 ]
+    while ! curl -s "$ZMD_URL" > /dev/null && [ $nb_zmd_try -lt 40 ]
     do
         sleep 0.2
-        nb_zmd_try=$(($nb_zmd_try+1))
+        nb_zmd_try=$((nb_zmd_try+1))
     done
 
     if [ $nb_zmd_try -eq 40 ]
@@ -552,8 +560,8 @@ if  ! $(_in "-data" $@) && ( $(_in "+data" $@) || $(_in "+base" $@) || $(_in "+f
     fi
 
     python manage.py loaddata fixtures/*.yaml; exVal=$?
-    python manage.py load_factory_data fixtures/advanced/aide_tuto_media.yaml; exVal=($exVal + $?)
-    python manage.py load_fixtures --size=low --all; exVal=($exVal + $?)
+    python manage.py load_factory_data fixtures/advanced/aide_tuto_media.yaml; exVal=$((exVal + $?))
+    python manage.py load_fixtures --size=low --all; exVal=$((exVal + $?))
 
     futureExit=false
     if [[ $exVal != 0 ]]; then

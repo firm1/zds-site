@@ -19,24 +19,24 @@ function zds_register_module_for_installation() {
     fi
 
     # install backend dependencies
-    if ! ([[ "$ZDS_TEST_JOB" == *"zds."* ]] ||
+    if ! { [[ "$ZDS_TEST_JOB" == *"zds."* ]] ||
         [[ "$ZDS_TEST_JOB" == *"selenium"* ]] ||
-        [[ "$ZDS_TEST_JOB" == *"doc"* ]]); then
+        [[ "$ZDS_TEST_JOB" == *"doc"* ]]; }; then
         print_info "* Don't register back because zds.* tasks, doc and selenium are not registered."
         zds_register_for_install "-back"
     else
         print_info "* Back is registered because zds.* tasks, doc or selenium are registered."
 
-        if ! ([[ "$ZDS_TEST_JOB" == *"zds."* ]] ||
-            [[ "$ZDS_TEST_JOB" == *"selenium"* ]]); then
+        if ! { [[ "$ZDS_TEST_JOB" == *"zds."* ]] ||
+            [[ "$ZDS_TEST_JOB" == *"selenium"* ]]; }; then
             print_info "* Don't migrate-db, if only doc are registered."
             zds_register_for_install "-back-migrate-db"
         fi
     fi
 
     # install frontend dependencies
-    if ! ([[ "$ZDS_TEST_JOB" == *"front"* ]] ||
-        [[ "$ZDS_TEST_JOB" == *"selenium"* ]]); then
+    if ! { [[ "$ZDS_TEST_JOB" == *"front"* ]] ||
+        [[ "$ZDS_TEST_JOB" == *"selenium"* ]]; }; then
         print_info "* Don't register front because front task and selenium are not registered."
         zds_register_for_install "-front"
     else

@@ -43,7 +43,7 @@ jobs:
     - name: "Job 3 : backend test2 (zds.mp zds.gallery zds.pages zds.featured zds.notification zds.searchv2)"
       env: ZDS_TEST_JOB="zds.mp zds.gallery zds.pages zds.featured zds.notification zds.searchv2"
     - name: "Job 4 : frontend test"
-      env: ZDS_TEST_JOB="front fixture selenium"
+      env: ZDS_TEST_JOB="front fixture selenium shell"
     - name: "Job 5 : doc"
       env: ZDS_TEST_JOB="doc"
 

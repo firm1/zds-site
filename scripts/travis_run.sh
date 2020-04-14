@@ -5,9 +5,9 @@ if [[ "$ZDS_TEST_JOB" == "none" ]]; then
 fi
 
 function print_info() {
-	echo -en "\033[0;36m"
+	echo -en "\\033[0;36m"
 	echo "$1"
-	echo -en "\033[00m"
+	echo -en "\\033[00m"
 }
 
 function error_handler() {
@@ -25,9 +25,10 @@ function run_script() {
 
 function activate_env() {
 	print_info "source $1/bin/activate"
+	# shellcheck source=/dev/null
 	source "$1/bin/activate"
 	exVal=$?
-	error_handler "!! Error: environnement not load.\n - Value = $1"
+	error_handler "!! Error: environnement not load.\\n - Value = $1"
 }
 
 activate_env "./$ZDS_VENV"
@@ -52,3 +53,5 @@ run_script "coverage_backend"
 run_script "lint_backend"
 
 run_script "build_documentation"
+
+run_script "lint_shell"

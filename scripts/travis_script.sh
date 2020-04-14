@@ -58,6 +58,16 @@ if [[ "$1" == "lint_frontend" ]] && [[ "$ZDS_TEST_JOB" == *"front"* ]]; then
     zds_fold_end
 fi
 
+# lint shell
+if [[ "$1" == "lint_shell" ]] && [[ "$ZDS_TEST_JOB" == *"shell"* ]]; then
+    zds_fold_start "lint_shell" "* Run lint for shell scripts"
+    shellcheck ./scripts/*.sh
+    exVal=$?
+
+    gateway "!! Test failed" $exVal
+    zds_fold_end
+fi
+
 # coverage backend
 if [[ "$1" == "coverage_backend" ]] && [[ "$ZDS_TEST_JOB" == *"zds."* ]]; then
     zds_fold_start "coverage_backend" "* Run coverage for backend"

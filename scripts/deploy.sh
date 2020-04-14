@@ -73,6 +73,7 @@ git checkout refs/heads/"$1"-build
 git checkout -b "$1"
 
 # Update application data
+# shellcheck source=/dev/null
 source $ENV_PATH/bin/activate
 pip install --upgrade -r requirements-prod.txt
 python manage.py migrate

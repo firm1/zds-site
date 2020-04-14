@@ -11,7 +11,7 @@ new-db: wipe-db migrate-db generate-fixtures ## Create a new full database (`wip
 run: ## Run the backend server and watch the frontend (`watch-front` in parallel with `run-back`)
 	make -j2 watch-front run-back
 
-lint: lint-back lint-front ## Lint everything (`lint-back` & `lint-front`)
+lint: lint-back lint-front lint-shell ## Lint everything (`lint-back` & `lint-front`)
 
 test: test-back test-back-selenium ## Test everything (`test-back` & `test-back-selenium`)
 
@@ -132,6 +132,9 @@ start-publication-watchdog: ## Start the publication watchdog
 	else \
 		echo 'Start zmarkdown first with `make zmd-start`'; \
 	fi
+
+lint-shell:
+	shellcheck scripts/*.sh
 
 # inspired from https://gist.github.com/sjparkinson/f0413d429b12877ecb087c6fc30c1f0a
 
