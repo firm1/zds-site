@@ -1,3 +1,5 @@
+/* globals oGrammalecteAPI, estPresentAntidoteAPI_JSConnect, activeAntidoteAPI_JSConnect */ // eslint-disable-line camelcase
+
 (function($) {
   'use strict'
 
@@ -338,10 +340,10 @@
     const mdeUniqueKey = (window.location.pathname + window.location.search + '@' + this.getAttribute('name')).replace(/[?|&]page=(\d+)/g, '')
 
     const smdeUniqueContent = localStorage.getItem('smde_' + mdeUniqueKey)
-    let minHeight = '500px'
+    let minHeight = 500
 
     if ($(this).hasClass('mini-editor')) {
-      minHeight = '200px'
+      minHeight = 200
     }
 
     var customMarkdownParser = function(plainText, preview) {
@@ -372,6 +374,7 @@
 
     /* global EasyMDE */
     var easyMDE = new EasyMDE({
+      autoDownloadFontAwesome: false,
       element: this,
       autosave: {
         enabled: true,
@@ -380,7 +383,7 @@
         delay: 1000
       },
       indentWithTabs: false,
-      minHeight: minHeight,
+      minHeight: minHeight + 'px',
       placeholder: 'Votre message au format Markdown',
       promptURLs: true,
       promptTexts: {
@@ -457,7 +460,7 @@
           action: (e) => {
             _toggleBlockZmd(e, 'keyboard', '||')
           },
-          className: 'fa fa-keyboard-o',
+          className: 'far fa-keyboard',
           title: 'Touche clavier'
         },
         {
@@ -520,21 +523,21 @@
           action: (e) => {
             _toggleBlockZmd(e, 'checklist', '- [ ] ')
           },
-          className: 'fa fa-check-square-o',
+          className: 'far fa-check-square',
           title: 'Liste de taches'
         },
         '|',
         {
           name: 'heading',
           action: EasyMDE.toggleHeadingSmaller,
-          className: 'fa fa-header',
+          className: 'fas fa-heading',
           title: 'Titres'
         },
         '|',
         {
           name: 'image',
           action: EasyMDE.drawImage,
-          className: 'fa fa-picture-o',
+          className: 'far fa-image',
           title: 'Image'
         },
         {
@@ -572,44 +575,80 @@
         },
         '|',
         {
-          name: 'blocInformation',
+          name: 'blocMenu',
           action: (e) => {
             _toggleBlockZmd(e, 'blocInformation', '| ')
           },
           className: 'fa fa-info',
-          title: 'Bloc information'
+          title: 'Bloc information',
+          children: [
+            {
+              name: 'blocInformation',
+              action: (e) => {
+                _toggleBlockZmd(e, 'blocInformation', '| ')
+              },
+              className: 'fa fa-info',
+              title: 'Bloc information'
+            },
+            {
+              name: 'blocQuestion',
+              action: (e) => {
+                _toggleBlockZmd(e, 'blocQuestion', '| ')
+              },
+              className: 'fa fa-question',
+              title: 'Bloc question'
+            },
+            {
+              name: 'blocError',
+              action: (e) => {
+                _toggleBlockZmd(e, 'blocError', '| ')
+              },
+              className: 'fas fa-times-circle',
+              title: 'Bloc erreur'
+            },
+            {
+              name: 'blocSecret',
+              action: (e) => {
+                _toggleBlockZmd(e, 'blocSecret', '| ')
+              },
+              className: 'fa fa-eye-slash',
+              title: 'Bloc secret'
+            },
+            {
+              name: 'blocNeutral',
+              action: (e) => {
+                _toggleBlockZmd(e, 'blocNeutral', '| ')
+              },
+              className: 'fa fa-sticky-note',
+              title: 'Bloc neutre'
+            }
+          ]
+        },
+        '|',
+        {
+          name: 'abc-spellchecker',
+          action: (evt) => {},
+          className: 'fas fa-spell-check',
+          title: 'Correcteur orthographique externe'
         },
         {
-          name: 'blocQuestion',
-          action: (e) => {
-            _toggleBlockZmd(e, 'blocQuestion', '| ')
+          name: 'abc-grammalecte',
+          action: (evt) => {
+            oGrammalecteAPI.openPanelForText(easyMDE.codemirror.getValue(), easyMDE.codemirror.display.lineDiv)
           },
-          className: 'fa fa-question',
-          title: 'Bloc question'
+          className: 'zdsicon zi-grammalecte',
+          title: 'Correcteur orthographique externe'
         },
         {
-          name: 'blocError',
-          action: (e) => {
-            _toggleBlockZmd(e, 'blocError', '| ')
+          name: 'switch-contentAreaStyle',
+          action: (evt) => {
+            const wrapper = easyMDE.codemirror.getWrapperElement()
+            $(wrapper.parentElement).children('.textarea-multivers').toggle()
+            $(wrapper).toggle()
+            easyMDE.codemirror.refresh()
           },
-          className: 'fa fa-times',
-          title: 'Bloc erreur'
-        },
-        {
-          name: 'blocSecret',
-          action: (e) => {
-            _toggleBlockZmd(e, 'blocSecret', '| ')
-          },
-          className: 'fa fa-eye-slash',
-          title: 'Bloc secret'
-        },
-        {
-          name: 'blocNeutral',
-          action: (e) => {
-            _toggleBlockZmd(e, 'blocNeutral', '| ')
-          },
-          className: 'fa fa-square',
-          title: 'Bloc neutre'
+          className: 'fas fa-broom',
+          title: 'Passe au mode compatibilité'
         },
         '|',
         {
@@ -698,5 +737,125 @@
     })
 
     this.removeAttribute('required')
+
+    const $twin = mirroringEasyMDE(easyMDE, textarea)
+
+    $twin.css('minHeight', minHeight + 22 + 'px')
+
+    spellcheckerEasyMDE(easyMDE)
   })
 })(jQuery)
+
+
+function mirroringEasyMDE(easyMDE, textarea) {
+  const $twin = $('<textarea></textarea>')
+
+  $twin.attr({
+    'data-antidoteapi_jsconnect_groupe_id': '01',
+    placeholder: textarea.placeholder,
+    class: 'textarea-multivers',
+    style: 'display: none;'
+  })
+
+  $twin.val(easyMDE.codemirror.getValue())
+
+  $twin.on('change input', function() {
+    easyMDE.codemirror.setValue($twin.val())
+  })
+  easyMDE.codemirror.on('change', function(cm) {
+    $twin.val(cm.getValue())
+  })
+  $twin.on('mousedown select keyup blur', function() {
+    setTimeout(() => {
+      const cm = easyMDE.codemirror
+      const start = convertAbsolute2CmPosition(cm, $twin[0].selectionStart)
+      const end = convertAbsolute2CmPosition(cm, $twin[0].selectionEnd)
+      cm.setSelection(start, end)
+    }, 12) // <-- after default trigger (I mean after browser trigger)
+  })
+
+  $(easyMDE.element.parentElement).children('.CodeMirror').before($twin)
+
+  return $twin
+}
+
+function getPositionConverterArray(text) {
+  const lines = text.split('\n')
+  const linesLength = lines.map((line, i) => line.length)
+
+  return ((arr) => {
+    for (let i = 0, length = 0; i < lines.length; i++, length += linesLength[i - 1] + 1) {
+      arr.push(length)
+    }
+    return arr
+  })([])
+}
+
+function convertCm2AbsolutePosition(cm, pos) { // eslint-disable-line no-unused-vars
+  const text = cm.getValue()
+  const sumLinesLength = getPositionConverterArray(text)
+
+  return sumLinesLength[pos.line] + pos.ch
+}
+
+function convertAbsolute2CmPosition(cm, pos) {
+  const text = cm.getValue()
+  const sumLinesLength = getPositionConverterArray(text)
+
+  const index = sumLinesLength.findIndex((num) => num > pos)
+  const line = ((index > -1) ? index : sumLinesLength.length) - 1
+
+  return {
+    line: line,
+    ch: pos - sumLinesLength[line]
+  }
+}
+
+function spellcheckerEasyMDE(easyMDE) {
+  $(easyMDE.toolbarElements['abc-spellchecker']).attr({
+    'data-antidoteapi_jsconnect_groupe_id': '01',
+    'data-antidoteapi_jsconnect_lanceoutil': 'C'
+  })
+
+  const contenteditable = easyMDE.codemirror.display.lineDiv
+  $(contenteditable).attr({
+    'data-grammalecte_button': false,
+    'data-grammalecte_result_via_event': true
+  })
+
+  contenteditable.addEventListener('GrammalecteResult', function(event) {
+    const detail = (typeof event.detail === 'string') && JSON.parse(event.detail)
+
+    if (detail && detail.sType === 'text') {
+      easyMDE.codemirror.setValue(detail.sText)
+    }
+  })
+
+  if (typeof oGrammalecteAPI !== 'object' || oGrammalecteAPI === null) {
+    $(easyMDE.toolbarElements['abc-grammalecte']).hide()
+
+    document.addEventListener('GrammalecteLoaded', function(event) {
+      $(easyMDE.toolbarElements['abc-grammalecte']).show()
+    })
+  }
+
+  if (typeof estPresentAntidoteAPI_JSConnect === 'function' && estPresentAntidoteAPI_JSConnect()) { // eslint-disable-line camelcase
+    activeAntidoteAPI_JSConnect()
+  } else {
+    $(easyMDE.toolbarElements['abc-spellchecker']).hide()
+  }
+
+  if (!window.thereIsAlreadyAStalkerOnThisPage) {
+    window.thereIsAlreadyAStalkerOnThisPage = true
+    const stalker = new MutationObserver(function(events) {
+      events.forEach((ev) => {
+        if (ev.type === 'attributes' && ev.attributeName === 'data-antidoteapi_jsconnect_initlistener') {
+          $(easyMDE.toolbarElements['abc-spellchecker']).show()
+          stalker.disconnect()
+        }
+      })
+    })
+    setTimeout(() => stalker.disconnect(), 30000)
+    stalker.observe(easyMDE.toolbarElements['abc-spellchecker'], { attributes: true })
+  }
+}
